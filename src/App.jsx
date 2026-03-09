@@ -11,7 +11,7 @@ import Wishlist from "./pages/Wishlist";
 import Navbar from "./components/Navbar";
 const App = () => {
   return (
-    <div className="px-4 md:px-10 py-3">
+    <div>
       <Navbar />
       <Routes>
       {/* Public Routes */}

@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <>
       {/* ── NAVBAR ── */}
-      <div className="flex justify-between items-center pb-3">
+      <div className="px-4 md:px-10 py-3 flex justify-between items-center">
 
         {/* Logo */}
         <Link to="/">
