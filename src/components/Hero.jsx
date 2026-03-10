@@ -11,7 +11,7 @@ const Hero = () => {
   <img
     src={assets.heroImg}
     alt="Okilau Hero"
-    className="sm:absolute sm:inset-0 w-full h-84 sm:h-screen object-cover object-[70%_center] sm:object-center"
+    className="sm:absolute sm:inset-0 w-full h-84 sm:h-full object-cover object-[70%_center] sm:object-center"
   />
 
   {/* Text Content — Left Side */}
@@ -19,7 +19,7 @@ const Hero = () => {
     <div className="px-4 md:px-8 lg:px-24">
 
       {/* Heading */}
-      <h1 className="font-['Anton'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-widest sm:leading-11 md:leading-13 lg:leading-16 text-black uppercase mb-4 text-center sm:text-left ">
+      <h1 className="font-['Anton'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-widest sm:leading-11 md:leading-13 lg:leading-16 text-black uppercase mb-4 text-center sm:text-left">
         Oversized <br />
         Printed T-Shirts
       </h1>

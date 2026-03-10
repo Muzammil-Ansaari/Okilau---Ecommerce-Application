@@ -7,7 +7,7 @@ const Button = ({
 }) => {
   const variants = {
     black:
-      "bg-black text-white border border-black hover:bg-white hover:text-black",
+      "bg-black text-white border border-black hover:bg-[#d0d0d0] hover:text-black",
     gray: "bg-[#D0D0D0] text-black border border-[#D0D0D0] hover:bg-black hover:text-white",
   };
 
