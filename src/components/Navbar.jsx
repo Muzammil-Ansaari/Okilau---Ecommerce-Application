@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
-import { ChevronLeft, Menu, Search, ShoppingBag, Star, User } from "lucide-react";
+import {
+  ChevronLeft,
+  Menu,
+  Search,
+  ShoppingBag,
+  Star,
+  User,
+} from "lucide-react";
 
 const NAV_LINKS = [
   { label: "HOME", path: "/" },
@@ -16,15 +23,14 @@ const Navbar = () => {
   return (
     <>
       {/* ── NAVBAR ── */}
-      <div className="px-4 md:px-10 py-3 flex justify-between items-center">
-
+      <div className="px-4 md:px-8 lg:px-24 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link to="/">
-          <img className="w-36" src={assets.logo} alt="okilau logo" />
+          <img className="w-24 sm:w-28" src={assets.logo} alt="okilau logo" />
         </Link>
 
         {/* Desktop Nav Links */}
-        <ul className="hidden sm:flex gap-12">
+        <ul className="hidden md:flex gap-10">
           {NAV_LINKS.map((link) => (
             <NavLink
               key={link.path}
@@ -39,9 +45,11 @@ const Navbar = () => {
               {({ isActive }) => (
                 <>
                   {link.label}
-                  <span className={`absolute -bottom-1 left-0 h-px bg-black transition-all duration-300 ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`} />
+                  <span
+                    className={`absolute -bottom-1 left-0 h-px bg-black transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
                 </>
               )}
             </NavLink>
@@ -73,7 +81,7 @@ const Navbar = () => {
           <Menu
             onClick={() => setVisible(true)}
             size={20}
-            className="cursor-pointer sm:hidden"
+            className="cursor-pointer md:hidden"
           />
         </div>
       </div>
@@ -87,11 +95,12 @@ const Navbar = () => {
       )}
 
       {/* ── SIDEBAR ── */}
-      <div className={`fixed top-0 right-0 h-full bg-white z-50 transition-all duration-300 overflow-hidden ${
-        visible ? "w-72" : "w-0"
-      }`}>
+      <div
+        className={`fixed top-0 right-0 h-full bg-white z-50 transition-all duration-300 overflow-hidden ${
+          visible ? "w-72" : "w-0"
+        }`}
+      >
         <div className="p-6 min-w-[288px]">
-
           {/* Back button */}
           <div
             onClick={() => setVisible(false)}
