@@ -9,6 +9,7 @@ import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 const App = () => {
   return (
     <div>
@@ -25,6 +26,7 @@ const App = () => {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/wishlist" element={<Wishlist />} />
     </Routes>
+    <Footer />
     </div>
   );
 };
