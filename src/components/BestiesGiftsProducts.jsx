@@ -1,13 +1,13 @@
 import React from "react";
-import Button from "./UI/Button";
 import { products } from "../data/products";
 import Card from "./UI/Card";
+import Button from "./UI/Button";
 
-const PetLoverProducts = () => {
+const BestiesGiftsProducts = () => {
   return (
     <section className="my-20 px-4 md:px-8 lg:px-24 text-center">
       <h2 className="font-['Anton'] font-medium tracking-wide text-black uppercase text-center mb-4 text-4xl">
-        Pet Lovers
+        Besties Gifts
       </h2>
       <div className="flex justify-between my-8">
         {products.map((p) => (
@@ -19,4 +19,4 @@ const PetLoverProducts = () => {
   );
 };
 
-export default PetLoverProducts;
+export default BestiesGiftsProducts;
