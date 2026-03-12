@@ -9,6 +9,8 @@ import {
   Star,
   User,
 } from "lucide-react";
+import { useWishlist } from "../context/WishlistContext";
+import { useCart } from "../context/CartContext";
 
 const NAV_LINKS = [
   { label: "HOME", path: "/" },
@@ -19,6 +21,8 @@ const NAV_LINKS = [
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
+  const { wishlistCount } = useWishlist();
+  const { cartCount, openSidebar } = useCart();
 
   return (
     <>
@@ -64,18 +68,22 @@ const Navbar = () => {
           {/* Wishlist */}
           <NavLink to="/wishlist" className="relative">
             <Star size={20} />
-            <span className="absolute -right-2.5 -top-3 bg-[#DA3F3F] text-white font-medium rounded-full w-4 text-xs text-center leading-4">
-              8
-            </span>
+            {wishlistCount > 0 && (
+              <span className="absolute -right-2.5 -top-3 bg-[#DA3F3F] text-white font-medium rounded-full w-4 text-xs text-center leading-4">
+                {wishlistCount > 9 ? "9+" : wishlistCount}
+              </span>
+            )}
           </NavLink>
 
           {/* Cart */}
-          <NavLink to="/cart" className="relative">
+          <button onClick={openSidebar} className="relative cursor-pointer">
             <ShoppingBag size={20} />
-            <span className="absolute -right-2.5 -top-3 bg-[#DA3F3F] text-white font-medium rounded-full w-4 text-xs text-center leading-4">
-              8
-            </span>
-          </NavLink>
+            {cartCount > 0 && (
+              <span className="absolute -right-2.5 -top-3 bg-[#DA3F3F] text-white font-medium rounded-full w-4 text-xs text-center leading-4">
+                {cartCount > 9 ? "9+" : cartCount}
+              </span>
+            )}
+          </button>
 
           {/* Hamburger — mobile only */}
           <Menu

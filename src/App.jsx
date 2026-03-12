@@ -10,10 +10,12 @@ import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CartSidebar from "./components/UI/CartSidebar";
 const App = () => {
   return (
     <div>
       <Navbar />
+      <CartSidebar />
       <Routes>
       {/* Public Routes */}
       <Route path="/" element={<Home />} />
