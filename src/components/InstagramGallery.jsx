@@ -6,7 +6,7 @@ const images = [assets.gallery_image_01, assets.gallery_image_02, assets.gallery
 
 const InstagramGallery = () => {
   return (
-    <section className="mb-10">
+    <section className="my-20">
       {/* Gallery Grid */}
       <div className="grid grid-cols-3 md:grid-cols-6">
         {images.map((image, index) => (

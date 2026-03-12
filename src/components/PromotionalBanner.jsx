@@ -26,7 +26,7 @@ const banners = [
 
 const PromotionalBanner = () => {
   return (
-    <section className="px-4 sm:px-8 lg:px-24 my-20">
+    <section className="px-4 md:px-8 lg:px-24 my-20">
       <div className="flex flex-col gap-8 md:flex-row">
 
         {/* Left Banner — 65% */}

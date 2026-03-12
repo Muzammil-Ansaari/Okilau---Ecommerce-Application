@@ -1,21 +1,38 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import { Heart } from "lucide-react";
 import Button from "./Button";
 
-const Card = ({id, title, price, image, trending}) => {
+const Card = ({ id, title, price, image }) => {
   return (
-    <div className="w-64 h-100 flex flex-col justify-between p-2 border border-[#d0d0d0]/50 hover:shadow-xl shadow-black/30">
-      <div className="h-60 cursor-pointer overflow-hidden">
-        <img
-          className="w-full h-full object-cover object-center hover:scale-120 transition-all duration-700"
-          src={image}
-          alt=""
-        />
+    <div className="group flex flex-col justify-between border border-[#d0d0d0]/50 p-2 shadow-sm transition-all duration-300 hover:shadow-xl text-center">
+
+      {/* Image */}
+      <div className="relative h-60 overflow-hidden cursor-pointer">
+        <Link to={`/products/${id}`}>
+          <img
+            className="h-full w-full object-cover object-center transition-all duration-700 group-hover:scale-110"
+            src={image}
+            alt={title}
+          />
+        </Link>
+
+        {/* Wishlist icon on hover */}
+        <button className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white opacity-0 shadow-md transition-all duration-300 group-hover:opacity-100 hover:bg-black hover:text-white">
+          <Heart size={14} />
+        </button>
       </div>
-      <p className="cursor-pointer font-semibold hover:text-gray-600 transition-all duration-300">
+
+      {/* Title */}
+      <p className="mt-2 cursor-pointer font-semibold transition-all duration-300 hover:text-gray-600">
         {title}
       </p>
-      <p className="font-medium text-gray-600 text-lg">{price}</p>
+
+      {/* Price */}
+      <p className="text-lg font-medium text-gray-600">{price}</p>
+
+      {/* Button */}
       <Button variant="gray">Select Options</Button>
+
     </div>
   );
 };

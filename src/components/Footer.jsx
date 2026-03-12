@@ -35,7 +35,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#F5F5F5]">
       {/* Main Footer */}
-      <div className="px-4 py-16 md:px-8 lg:px-24">
+      <div className="px-4 pb-8 md:px-8 lg:px-24">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 text-center sm:text-left">
           {/* Subscribe Column */}
           <div className="lg:col-span-2">
