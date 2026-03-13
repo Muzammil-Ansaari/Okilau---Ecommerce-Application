@@ -11,7 +11,7 @@ const Card = ({ id, title, price, image }) => {
   const product = { id, title, price, image };
 
   return (
-    <div className="group flex flex-col justify-between border border-[#d0d0d0]/50 p-2 shadow-sm transition-all duration-300 hover:shadow-xl text-center">
+    <div className="h-100 group flex flex-col justify-between border border-[#d0d0d0]/50 p-2 shadow-sm transition-all duration-300 hover:shadow-xl text-center">
       {/* Image */}
       <div className="relative h-60 overflow-hidden cursor-pointer">
         <Link to={`/products/${id}`}>
@@ -38,9 +38,11 @@ const Card = ({ id, title, price, image }) => {
       </div>
 
       {/* Title */}
-      <p className="my-2 cursor-pointer font-semibold transition-all duration-300 hover:text-gray-600">
-        {title}
-      </p>
+      <Link to={`/products/${id}`}>
+        <p className="my-2 cursor-pointer font-semibold transition-all duration-300 hover:text-gray-600">
+          {title}
+        </p>
+      </Link>
 
       {/* Price */}
       <p className="mb-2 text-lg font-medium text-gray-600">Rs. {price}</p>

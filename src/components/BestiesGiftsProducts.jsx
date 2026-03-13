@@ -3,6 +3,7 @@ import { products } from "../data/products";
 import Card from "./UI/Card";
 import Button from "./UI/Button";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from "react-router-dom";
 
 const BestiesGiftsProducts = () => {
   return (
@@ -20,16 +21,23 @@ const BestiesGiftsProducts = () => {
           1024: { slidesPerView: 4.2, spaceBetween: 20 },
         }}
       >
-        {products.map((p) => (
-          <SwiperSlide key={p.id}>
-            <Card id={p.id} image={p.image} title={p.title} price={p.price} />
-          </SwiperSlide>
-        ))}
+        {products
+          .filter((p) => p.trending)
+          .map((product) => (
+            <SwiperSlide key={product.id}>
+              <Card
+                id={product.id}
+                image={product.image}
+                title={product.title}
+                price={product.price}
+              />
+            </SwiperSlide>
+          ))}
       </Swiper>
 
-      <div className="mt-10">
-        <Button variant="black">View All Products</Button>
-      </div>
+      <Link to={"/products"}>
+        <Button className="mt-10" variant="black">View All Products</Button>
+      </Link>
     </section>
   );
 };

@@ -3,12 +3,9 @@ import CategoriesCard from "./UI/CategoriesCard";
 import { assets } from "../assets/assets";
 
 const categories = [
-    {id: 1, image: assets.apparel, title: "Apparel"},
-    {id: 2, image: assets.mug, title: "Mugs"},
-    {id: 3, image: assets.marks, title: "Marks"},
-    {id: 4, image: assets.phone_cases, title: "Phone Cases"},
-    {id: 5, image: assets.doormat, title: "Doormat"},
-    {id: 6, image: assets.blanket, title: "Blanket"},
+    {id: 1, image: assets.apparel, title: "MEN"},
+    {id: 2, image: assets.mug, title: "WOMEN"},
+    {id: 3, image: assets.blanket, title: "KIDS"},
 ]
 
 const ShopByCategories = () => {
@@ -17,7 +14,7 @@ const ShopByCategories = () => {
       <h2 className="font-['Anton'] font-medium tracking-wide text-black uppercase text-center mb-12 text-4xl">
         shop by categories
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {categories.map((category) => <CategoriesCard key={category.id} category={category} />)}
       </div>
     </section>

@@ -10,8 +10,7 @@ const companyLinks = [
 ];
 
 const informationLinks = [
-  { label: "My Account", path: "/#" },
-  { label: "Login", path: "/#" },
+  { label: "My Account", path: "/account" },
   { label: "My Cart", path: "/cart" },
   { label: "Wishlist", path: "/wishlist" },
   { label: "Checkout", path: "/checkout" },
@@ -33,7 +32,7 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="bg-[#F5F5F5]">
+    <footer className="bg-[#F5F5F5] mt-10">
       {/* Main Footer */}
       <div className="px-4 pb-8 md:px-8 lg:px-24">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 text-center sm:text-left">

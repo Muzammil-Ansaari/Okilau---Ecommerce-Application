@@ -1,0 +1,20 @@
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+
+const ProtectedRoute = ({ children }) => {
+  const { isLoggedIn, openAuthModal } = useAuth();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      openAuthModal();
+    }
+  }, [isLoggedIn]);
+
+  if (!isLoggedIn) {
+    return null; // render nothing while modal opens
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;
