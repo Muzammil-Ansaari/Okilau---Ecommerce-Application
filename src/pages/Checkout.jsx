@@ -182,7 +182,7 @@ const Checkout = () => {
                     key={`${item.id}-${item.size}-${index}`}
                     className="flex items-center gap-3"
                   >
-                    <div className="relative h-16 w-14 flex-shrink-0">
+                    <div className="relative h-16 w-14 shrink-0">
                       <img
                         src={item.image}
                         alt={item.title}

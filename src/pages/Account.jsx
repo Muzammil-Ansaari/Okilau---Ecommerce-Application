@@ -98,7 +98,7 @@ const Account = () => {
 
           {/* Empty wishlist */}
           {wishlistItems.length === 0 ? (
-            <div className="flex min-h-[200px] flex-col items-center justify-center gap-4 bg-[#F5F5F5]">
+            <div className="flex min-h-50 flex-col items-center justify-center gap-4 bg-[#F5F5F5]">
               <Heart size={36} className="text-gray-200" />
               <p className="text-sm text-gray-400">
                 No items in your wishlist yet.
