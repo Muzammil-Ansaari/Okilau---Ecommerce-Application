@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MapPin, Mail, Clock } from "lucide-react";
 import Button from "../components/UI/Button";
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -23,23 +24,41 @@ const Contact = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  // handleSubmit
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      );
+
       setSubmitted(true);
+      setForm({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.log(error);
+      setErrors({ message: "Failed to send message. Please try again." });
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <section className="min-h-screen">
-
       {/* ── Hero Banner ── */}
       <div className="flex h-48 items-center justify-center bg-[#F5F5F5] sm:h-80">
         <div className="text-center">
@@ -55,7 +74,6 @@ const Contact = () => {
       {/* ── Main Content ── */}
       <div className="px-4 py-20 md:px-8 lg:px-16">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-
           {/* ── Left — Contact Info ── */}
           <div className="flex flex-col gap-8">
             <div>
@@ -63,15 +81,14 @@ const Contact = () => {
                 We'd Love to Hear From You
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-gray-500">
-                Have a question about your order, a product, or just want to
-                say hello? Fill out the form and we'll get back to you as soon
-                as possible.
+                Have a question about your order, a product, or just want to say
+                hello? Fill out the form and we'll get back to you as soon as
+                possible.
               </p>
             </div>
 
             {/* Info Cards */}
             <div className="flex flex-col gap-4">
-
               <div className="flex items-start gap-4 bg-[#F5F5F5] p-5">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-black text-white">
                   <MapPin size={18} />
@@ -113,7 +130,6 @@ const Contact = () => {
                   </p>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -129,8 +145,8 @@ const Contact = () => {
                   Message Sent!
                 </h3>
                 <p className="text-sm text-gray-500">
-                  Thank you for reaching out. We'll get back to you within
-                  24 hours.
+                  Thank you for reaching out. We'll get back to you within 24
+                  hours.
                 </p>
                 <button
                   onClick={() => {
@@ -145,7 +161,6 @@ const Contact = () => {
             ) : (
               // Form
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-
                 {/* Name */}
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-medium uppercase tracking-widest text-gray-500">
@@ -214,14 +229,11 @@ const Contact = () => {
                 >
                   {loading ? "Sending..." : "Send Message"}
                 </Button>
-
               </form>
             )}
           </div>
-
         </div>
       </div>
-
     </section>
   );
 };

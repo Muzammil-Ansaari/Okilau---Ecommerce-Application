@@ -8,27 +8,43 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import CartSidebar from "./components/UI/CartSidebar";
 import AuthModal from "./components/UI/AuthModel";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Account from "./pages/Account";
 import OrderSuccess from "./pages/OrderSuccess";
+import AdminRoute from "./components/admin/AdminRoute";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminProducts from "./pages/admin/Products";
+import AdminOrders from "./pages/admin/Orders";
+import AdminUsers from "./pages/admin/Users";
+
+// ── MainLayout ──
+import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
+const MainLayout = () => (
+  <>
+    <Navbar />
+    <CartSidebar />
+    <AuthModal />
+    <Outlet />
+    <Footer />
+  </>
+);
+
 const App = () => {
   return (
-    <div>
-      <Navbar />
-      <CartSidebar />
-      <AuthModal />
-      <Routes>
-        {/* Public Routes */}
+    <Routes>
+      {/* ── User routes ── */}
+      <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
-        {/* Protected Routes */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route
@@ -55,9 +71,23 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-      </Routes>
-      <Footer />
-    </div>
+      </Route>
+
+      {/* ── Admin routes — with Sidebar only ── */}
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminLayout />
+          </AdminRoute>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="orders" element={<AdminOrders />} />
+        <Route path="users" element={<AdminUsers />} />
+      </Route>
+    </Routes>
   );
 };
 

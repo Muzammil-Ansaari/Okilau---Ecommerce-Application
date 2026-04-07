@@ -36,7 +36,13 @@ const Navbar = () => {
         <div className="px-4 md:px-8 lg:px-24 py-3 flex justify-between items-center">
           {/* Logo */}
           <Link to="/">
-            <img className="w-24 sm:w-28" src={assets.logo} alt="okilau logo" />
+            <img
+              className="w-24 sm:w-28"
+              src={
+                "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/logo_gb8nll.png"
+              }
+              alt="okilau logo"
+            />
           </Link>
 
           {/* Desktop Nav Links */}

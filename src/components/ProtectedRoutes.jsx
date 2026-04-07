@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
   }, [isLoggedIn]);
 
   if (!isLoggedIn) {
-    return null; // render nothing while modal opens
+    return null; 
   }
 
   return children;

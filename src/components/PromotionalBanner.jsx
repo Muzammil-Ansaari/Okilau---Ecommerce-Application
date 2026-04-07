@@ -1,7 +1,7 @@
-import React from 'react'
-import { assets } from '../assets/assets';
-import { Link } from 'react-router-dom';
-import Button from './UI/Button';
+import React from "react";
+import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
+import Button from "./UI/Button";
 
 const banners = [
   {
@@ -10,7 +10,8 @@ const banners = [
     paragraph: "From millions of things designed and sold by artists.",
     buttonText: "Shop Now",
     link: "/products",
-    image: assets.banner1,
+    image:
+      "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/banner1_pspwj7.jpg",
     textColor: "text-white",
   },
   {
@@ -19,7 +20,8 @@ const banners = [
     paragraph: "Affiliate Gear",
     buttonText: "Shop Now",
     link: "/products",
-    image: assets.banner2,
+    image:
+      "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/banner2_wmsfsr.jpg",
     textColor: "text-black",
   },
 ];
@@ -28,7 +30,6 @@ const PromotionalBanner = () => {
   return (
     <section className="px-4 md:px-8 lg:px-24 my-20">
       <div className="flex flex-col gap-8 md:flex-row">
-
         {/* Left Banner — 65% */}
         <div className="relative h-100 w-full overflow-hidden md:w-[65%] group">
           <img
@@ -68,10 +69,9 @@ const PromotionalBanner = () => {
             </Link>
           </div>
         </div>
-
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default PromotionalBanner
+export default PromotionalBanner;

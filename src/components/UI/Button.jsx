@@ -4,6 +4,7 @@ const Button = ({
   variant = "black",
   className = "",
   type = "button",
+  disabled = false,
 }) => {
   const variants = {
     black:
@@ -15,11 +16,12 @@ const Button = ({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={`
         inline-flex items-center justify-center gap-2
         px-10 py-3.5 text-sm
         font-medium tracking-widest uppercase
-        transition-all duration-300 cursor-pointer
+        transition-all duration-300 cursor-pointer ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         ${variants[variant]}
         ${className}
       `}

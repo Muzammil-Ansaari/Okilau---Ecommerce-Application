@@ -1,84 +1,76 @@
 import { createContext, useContext, useState } from "react";
+import axiosInstance from "../utils/axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // ── Registered users array (persists in localStorage) ──
-  const [registeredUsers, setRegisteredUsers] = useState(() => {
-    const saved = localStorage.getItem("okilau-users");
-    return saved ? JSON.parse(saved) : [];
-  });
 
-  // ── Currently logged in user ──
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("okilau-user");
     return saved ? JSON.parse(saved) : null;
   });
 
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("okilau-token") || null;
+  });
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // ── Computed ──
   const isLoggedIn = !!user;
 
-  // ── Modal controls ──
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
 
   // ── Signup ──
-  const signup = (name, email, password) => {
-    // check if email already registered
-    const exists = registeredUsers.find(
-      (u) => u.email.toLowerCase() === email.toLowerCase()
-    );
-    if (exists) {
-      return { success: false, error: "An account with this email already exists." };
+  const signup = async (name, email, password) => {
+    try {
+      const { data } = await axiosInstance.post("/auth/signup", {
+        name,
+        email,
+        password,
+      });
+
+      setToken(data.token);
+      setUser(data.user);
+      localStorage.setItem("okilau-token", data.token);
+      localStorage.setItem("okilau-user", JSON.stringify(data.user));
+
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || "Something went wrong.",
+      };
     }
-
-    // create new user
-    const newUser = {
-      id: Date.now(),
-      name,
-      email: email.toLowerCase(),
-      password, // in real app this would be hashed!
-    };
-
-    // add to registered users array
-    const updatedUsers = [...registeredUsers, newUser];
-    setRegisteredUsers(updatedUsers);
-    localStorage.setItem("okilau-users", JSON.stringify(updatedUsers));
-
-    // auto login after signup
-    const loggedInUser = { id: newUser.id, name: newUser.name, email: newUser.email };
-    setUser(loggedInUser);
-    localStorage.setItem("okilau-user", JSON.stringify(loggedInUser));
-
-    return { success: true };
   };
 
   // ── Login ──
-  const login = (email, password) => {
-    // find user in registered users
-    const found = registeredUsers.find(
-      (u) =>
-        u.email.toLowerCase() === email.toLowerCase() &&
-        u.password === password
-    );
+  const login = async (email, password) => {
+    try {
+      const { data } = await axiosInstance.post("/auth/login", {
+        email,
+        password,
+      });
 
-    if (!found) {
-      return { success: false, error: "Invalid email or password" };
+      setToken(data.token);
+      setUser(data.user);
+      localStorage.setItem("okilau-token", data.token);
+      localStorage.setItem("okilau-user", JSON.stringify(data.user));
+
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || "Something went wrong.",
+      };
     }
-
-    // login user (don't store password in active session)
-    const loggedInUser = { id: found.id, name: found.name, email: found.email };
-    setUser(loggedInUser);
-    localStorage.setItem("okilau-user", JSON.stringify(loggedInUser));
-
-    return { success: true };
   };
 
   // ── Logout ──
   const logout = () => {
     setUser(null);
+    setToken(null);
+    localStorage.removeItem("okilau-token");
     localStorage.removeItem("okilau-user");
   };
 
@@ -86,6 +78,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        token,
         isLoggedIn,
         login,
         signup,

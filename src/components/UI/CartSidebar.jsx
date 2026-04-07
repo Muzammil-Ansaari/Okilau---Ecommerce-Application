@@ -60,7 +60,6 @@ const CartSidebar = () => {
 
         {/* Cart Items */}
         {cartItems.length === 0 ? (
-          // Empty State
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6">
             <ShoppingBag size={48} className="text-gray-200" />
             <p className="text-sm text-gray-400">Your cart is empty</p>
@@ -74,8 +73,10 @@ const CartSidebar = () => {
             <div className="flex-1 overflow-y-auto px-6 py-4">
               <div className="flex flex-col gap-6">
                 {cartItems.map((item, index) => (
-                  <div key={`${item.id}-${item.size}-${index}`} className="flex gap-4">
-
+                  <div
+                    key={`${item.id}-${item.size}-${index}`}
+                    className="flex gap-4"
+                  >
                     {/* Product Image */}
                     <Link
                       to={`/products/${item.id}`}
@@ -115,7 +116,9 @@ const CartSidebar = () => {
                         {/* Qty Controls */}
                         <div className="flex items-center border border-gray-200">
                           <button
-                            onClick={() => updateQty(item.id, item.size, item.qty - 1)}
+                            onClick={() =>
+                              updateQty(item.id, item.size, item.qty - 1)
+                            }
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                           >
                             <Minus size={12} />
@@ -124,7 +127,10 @@ const CartSidebar = () => {
                             {item.qty}
                           </span>
                           <button
-                            onClick={() => updateQty(item.id, item.size, item.qty + 1)}
+                            onClick={() =>
+                              updateQty(item.id, item.size, item.qty + 1)
+                            }
+                            disabled={item.qty >= item.stock}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                           >
                             <Plus size={12} />
@@ -145,7 +151,6 @@ const CartSidebar = () => {
                     >
                       <X size={16} />
                     </button>
-
                   </div>
                 ))}
               </div>
@@ -153,7 +158,6 @@ const CartSidebar = () => {
 
             {/* Footer */}
             <div className="border-t border-gray-100 px-6 py-6">
-
               {/* Subtotal */}
               <div className="mb-4 flex items-center justify-between">
                 <p className="text-sm text-gray-500">Subtotal</p>
@@ -168,7 +172,11 @@ const CartSidebar = () => {
 
               {/* Buttons */}
               <div className="flex flex-col gap-3">
-                <Button variant="black" className="w-full" onClick={handleCheckout}>
+                <Button
+                  variant="black"
+                  className="w-full"
+                  onClick={handleCheckout}
+                >
                   Proceed to Checkout
                 </Button>
                 <Link to="/cart" onClick={closeSidebar}>
@@ -177,7 +185,6 @@ const CartSidebar = () => {
                   </Button>
                 </Link>
               </div>
-
             </div>
           </>
         )}

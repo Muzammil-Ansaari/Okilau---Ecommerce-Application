@@ -4,11 +4,11 @@ import Button from "./Button";
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
 
-const Card = ({ id, title, price, image }) => {
+const Card = ({ id, title, price, image, stock }) => {
   const { toggleWishlist, isWishlisted } = useWishlist();
   const { addToCart, openSidebar } = useCart();
 
-  const product = { id, title, price, image };
+  const product = { id, title, price, image, stock };
 
   return (
     <div className="h-100 group flex flex-col justify-between border border-[#d0d0d0]/50 p-2 shadow-sm transition-all duration-300 hover:shadow-xl text-center">
@@ -50,12 +50,14 @@ const Card = ({ id, title, price, image }) => {
       {/* Button */}
       <Button
         variant="gray"
+        disabled={stock === 0}
         onClick={() => {
-          addToCart({ ...product, size: "M" }); // default size for no-variation products
+          if (stock === 0) return;
+          addToCart({ ...product, size: "M" });
           openSidebar();
         }}
       >
-        Add to Cart
+        {stock === 0 ? "Out of Stock" : "Add to Cart"}
       </Button>
     </div>
   );

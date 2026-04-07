@@ -2,7 +2,14 @@ import React from "react";
 import { assets } from "../assets/assets";
 import { Instagram } from "lucide-react";
 
-const images = [assets.gallery_image_01, assets.gallery_image_02, assets.gallery_image_03, assets.gallery_image_04, assets.gallery_image_05, assets.gallery_image_06];
+const images = [
+  "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458828/gallery_image_01_w0txgf.jpg",
+  "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458827/gallery_image_02_z0j2a8.jpg",
+  "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458828/gallery_image_03_m8lmwo.jpg",
+  "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458827/gallery_image_04_n3m0fx.jpg",
+  "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458827/gallery_image_05_anhk3s.jpg",
+  "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458828/gallery_image_06_hzwugs.jpg",
+];
 
 const InstagramGallery = () => {
   return (

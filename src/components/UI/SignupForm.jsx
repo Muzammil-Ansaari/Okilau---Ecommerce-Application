@@ -10,11 +10,11 @@ const SignupForm = ({ onSwitch, onSuccess }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // basic validation
+    
     if (!name || !email || !password) {
       setError("Please fill in all fields.");
       return;
@@ -23,21 +23,20 @@ const SignupForm = ({ onSwitch, onSuccess }) => {
       setError("Please enter a valid email.");
       return;
     }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
       return;
     }
 
     setLoading(true);
 
-    // mock delay
-    setTimeout(() => {
-      const result = signup(name, email, password);
-      if (result.success) {
-        onSuccess();
-      }
-      setLoading(false);
-    }, 800);
+    const result = await signup(name, email, password);
+    if (result.success) {
+      onSuccess();
+    } else {
+      setError(result.error);
+    }
+    setLoading(false);
   };
 
   return (
@@ -92,13 +91,11 @@ const SignupForm = ({ onSwitch, onSuccess }) => {
             placeholder="••••••••"
             className="border border-gray-200 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
           />
-          <p className="text-xs text-gray-400">Minimum 6 characters</p>
+          <p className="text-xs text-gray-400">Minimum 8 characters</p>
         </div>
 
         {/* Error */}
-        {error && (
-          <p className="text-xs text-red-500">{error}</p>
-        )}
+        {error && <p className="text-xs text-red-500">{error}</p>}
 
         {/* Submit */}
         <button

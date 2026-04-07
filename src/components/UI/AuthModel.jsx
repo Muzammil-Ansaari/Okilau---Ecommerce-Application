@@ -6,12 +6,12 @@ import SignupForm from "./SignupForm";
 
 const AuthModal = () => {
   const { isAuthModalOpen, closeAuthModal } = useAuth();
-  const [activeTab, setActiveTab] = useState("login"); // "login" | "signup"
+  const [activeTab, setActiveTab] = useState("login");
 
-  // close modal on success
+  
   const handleSuccess = () => {
     closeAuthModal();
-    setActiveTab("login"); // reset to login tab for next time
+    setActiveTab("login"); 
   };
 
   if (!isAuthModalOpen) return null;

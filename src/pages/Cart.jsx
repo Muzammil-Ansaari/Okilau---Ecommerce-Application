@@ -11,7 +11,6 @@ const Cart = () => {
   const shipping = cartTotal > 5000 ? 0 : 299;
   const total = cartTotal + shipping;
 
-  // ── Empty Cart State ──
   if (cartItems.length === 0) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4">

@@ -4,21 +4,21 @@ import { assets } from "../assets/assets";
 const features = [
   {
     id: 1,
-    image: assets.feature_icon_01,
+    image: "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458827/feature_icon_01_li8joq.png",
     title: "Free Shipping",
     description:
       "Get complimentary ground shipping on every order. Don't love it? Send it back, on us.",
   },
   {
     id: 2,
-    image: assets.feature_icon_02,
+    image: "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/feature_icon_02_pt6wzq.png",
     title: "Locally Owned",
     description:
       "Join Okilau Rewards to earn gift cards and enjoy exclusive member benefits.",
   },
   {
     id: 3,
-    image: assets.feature_icon_03,
+    image: "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458827/feature_icon_03_muvu8z.png",
     title: "Money Back Guarantee",
     description:
       "We believe getting dressed should be the easiest part of your day.",

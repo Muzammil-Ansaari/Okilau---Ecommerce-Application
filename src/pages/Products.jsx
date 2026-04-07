@@ -1,11 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { SlidersHorizontal, X, ChevronDown, ChevronUp } from "lucide-react";
-import { products } from "../data/products";
 import Card from "../components/UI/Card";
 import { useSearchParams } from "react-router-dom";
+import useProducts from "../hooks/useProducts";
 
 const CATEGORIES = ["Men", "Women", "Kids"];
-const SIZES = ["S", "M", "L", "XL", "XXL"];
+const SIZES = ["S", "M", "L", "XL"];
 const COLORS = [
   { name: "Black", hex: "#000000" },
   { name: "White", hex: "#ffffff" },
@@ -37,16 +37,57 @@ const FilterSection = ({ title, children }) => {
 };
 
 const Products = () => {
+  const [searchParams] = useSearchParams();
+
   // ── Filter State ──
+  const [selectedCategories, setSelectedCategories] = useState(() => {
+    const cat = searchParams.get("category");
+    return cat ? [cat.charAt(0).toUpperCase() + cat.slice(1)] : [];
+  });
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [sortBy, setSortBy] = useState("newest");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-  const [searchParams] = useSearchParams();
-  const [selectedCategories, setSelectedCategories] = useState(() => {
-    const cat = searchParams.get("category");
-    return cat ? [cat.charAt(0).toUpperCase() + cat.slice(1)] : [];
+
+  // ── Fetch ALL products from API (only sort sent to API) ──
+  const { products, loading, error } = useProducts({
+    sort: sortBy,
+  });
+
+  // ── All filtering done on frontend ──
+  const filteredProducts = products.filter((p) => {
+    // filter by category
+    if (selectedCategories.length > 0) {
+      if (
+        !selectedCategories
+          .map((c) => c.toLowerCase())
+          .includes(p.category?.toLowerCase())
+      ) {
+        return false;
+      }
+    }
+
+    // filter by size
+    if (selectedSizes.length > 0) {
+      if (!p.sizes || !p.sizes.some((s) => selectedSizes.includes(s))) {
+        return false;
+      }
+    }
+
+    // filter by color
+    if (selectedColors.length > 0) {
+      if (!p.colors || !p.colors.some((c) => selectedColors.includes(c))) {
+        return false;
+      }
+    }
+
+    // filter by price
+    if (p.price < priceRange[0] || p.price > priceRange[1]) {
+      return false;
+    }
+
+    return true;
   });
 
   // ── Toggle helpers ──
@@ -72,51 +113,9 @@ const Products = () => {
     priceRange[0] > 0 ||
     priceRange[1] < 10000;
 
-  // ── Filter + Sort products ──
-  const filteredProducts = useMemo(() => {
-    let result = [...products];
-
-    // filter by category
-    if (selectedCategories.length > 0) {
-      result = result.filter((p) =>
-        selectedCategories
-          .map((c) => c.toLowerCase())
-          .includes(p.category?.toLowerCase()),
-      );
-    }
-
-    // filter by size
-    if (selectedSizes.length > 0) {
-      result = result.filter(
-        (p) => !p.sizes || p.sizes.some((s) => selectedSizes.includes(s)),
-      );
-    }
-
-    // filter by color
-    if (selectedColors.length > 0) {
-      result = result.filter(
-        (p) => !p.colors || p.colors.some((c) => selectedColors.includes(c)),
-      );
-    }
-
-    // filter by price
-    result = result.filter(
-      (p) => p.price >= priceRange[0] && p.price <= priceRange[1],
-    );
-
-    // sort
-    if (sortBy === "price_asc") result.sort((a, b) => a.price - b.price);
-    if (sortBy === "price_desc") result.sort((a, b) => b.price - a.price);
-    if (sortBy === "popular")
-      result.sort((a, b) => (b.trending ? 1 : 0) - (a.trending ? 1 : 0));
-
-    return result;
-  }, [selectedCategories, selectedSizes, selectedColors, priceRange, sortBy]);
-
   // ── Sidebar JSX ──
   const Sidebar = () => (
     <div className="flex flex-col">
-      {/* Sidebar Header */}
       <div className="mb-2 flex items-center justify-between">
         <h2 className="font-['Anton'] text-lg uppercase tracking-widest text-black">
           Filters
@@ -221,7 +220,7 @@ const Products = () => {
           All Products
         </h1>
         <p className="mt-2 text-sm text-gray-400">
-          {filteredProducts.length} products found
+          {loading ? "Loading..." : `${filteredProducts.length} products found`}
         </p>
       </div>
 
@@ -233,9 +232,8 @@ const Products = () => {
 
         {/* ── Main Content ── */}
         <div className="flex-1">
-          {/* Top bar — sort + mobile filter button */}
+          {/* Top bar */}
           <div className="mb-6 flex items-center justify-between">
-            {/* Mobile filter button */}
             <button
               onClick={() => setIsMobileFilterOpen(true)}
               className="flex items-center gap-2 border border-gray-200 px-4 py-2 text-sm font-medium transition-colors hover:border-black lg:hidden"
@@ -249,7 +247,6 @@ const Products = () => {
               )}
             </button>
 
-            {/* Sort */}
             <div className="ml-auto flex items-center gap-2">
               <span className="hidden text-sm text-gray-400 sm:block">
                 Sort by:
@@ -323,34 +320,56 @@ const Products = () => {
             </div>
           )}
 
+          {/* Loading */}
+          {loading && (
+            <div className="flex min-h-[40vh] items-center justify-center">
+              <p className="text-sm uppercase tracking-widest text-gray-400">
+                Loading...
+              </p>
+            </div>
+          )}
+
+          {/* Error */}
+          {error && (
+            <div className="flex min-h-[40vh] items-center justify-center">
+              <p className="text-sm text-red-400">{error}</p>
+            </div>
+          )}
+
           {/* Product Grid */}
-          {filteredProducts.length === 0 ? (
-            <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
-              <p className="text-gray-400">No products match your filters.</p>
-              <button
-                onClick={clearFilters}
-                className="text-sm underline underline-offset-4 hover:text-gray-600"
-              >
-                Clear all filters
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-              {filteredProducts.map((product) => (
-                <Card
-                  key={product.id}
-                  id={product.id}
-                  title={product.title}
-                  price={product.price}
-                  image={product.image}
-                />
-              ))}
-            </div>
+          {!loading && !error && (
+            <>
+              {filteredProducts.length === 0 ? (
+                <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4">
+                  <p className="text-gray-400">
+                    No products match your filters.
+                  </p>
+                  <button
+                    onClick={clearFilters}
+                    className="text-sm underline underline-offset-4 hover:text-gray-600"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  {filteredProducts.map((product) => (
+                    <Card
+                      key={product._id}
+                      id={product._id}
+                      title={product.title}
+                      price={product.price}
+                      image={product.image}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
 
-      {/* ── Mobile Filter Drawer ── */}
+      {/* Mobile Filter Drawer */}
       {isMobileFilterOpen && (
         <>
           <div

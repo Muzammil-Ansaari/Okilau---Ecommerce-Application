@@ -9,11 +9,10 @@ const LoginForm = ({ onSwitch, onSuccess }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // basic validation
     if (!email || !password) {
       setError("Please fill in all fields.");
       return;
@@ -25,16 +24,15 @@ const LoginForm = ({ onSwitch, onSuccess }) => {
 
     setLoading(true);
 
-    // mock delay
-    setTimeout(() => {
-      const result = login(email, password);
-      if (result.success) {
-        onSuccess();
-      } else {
-        setError("Invalid email or password OR User doesn't exist.");
-      }
-      setLoading(false);
-    }, 800);
+    const result = await login(email, password);
+
+    if (result.success) {
+      onSuccess();
+    } else {
+      setError(result.error);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -78,9 +76,7 @@ const LoginForm = ({ onSwitch, onSuccess }) => {
         </div>
 
         {/* Error */}
-        {error && (
-          <p className="text-xs text-red-500">{error}</p>
-        )}
+        {error && <p className="text-xs text-red-500">{error}</p>}
 
         {/* Submit */}
         <button

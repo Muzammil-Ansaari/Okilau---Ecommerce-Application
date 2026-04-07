@@ -2,14 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 
-
 const promos = [
   {
     id: 1,
     title: "The Rolling Stones",
     buttonText: "Shop Now",
     link: "/products",
-    image: assets.promo_card_01,
+    image:
+      "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/promo_card_01_ad0cow.jpg",
     bgColor: "bg-black",
     textColor: "text-black",
   },
@@ -18,7 +18,8 @@ const promos = [
     title: "Boss Lady Collection",
     buttonText: "Shop Now",
     link: "/products",
-    image: assets.promo_card_02,
+    image:
+      "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/promo_card_02_atdtgp.jpg",
     bgColor: "bg-white",
     textColor: "text-white",
   },
@@ -27,7 +28,8 @@ const promos = [
     title: "Wouf Ladies Laptop Case",
     buttonText: "Shop Now",
     link: "/products",
-    image: assets.promo_card_03,
+    image:
+      "https://res.cloudinary.com/dm6dltg3s/image/upload/v1775458826/promo_card_03_rvsx8o.jpg",
     bgColor: "bg-black",
     textColor: "text-black",
   },
@@ -38,10 +40,7 @@ const PromoCards = () => {
     <section className="px-4 my-20 md:px-8 lg:px-24">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
         {promos.map((promo) => (
-          <div
-            key={promo.id}
-            className={"relative flex h-60 overflow-hidden"}
-          >
+          <div key={promo.id} className={"relative flex h-60 overflow-hidden"}>
             {/* Text — top left */}
             <div className="flex flex-col justify-between p-6 w-[50%] sm:w-full md:w-[75%] lg:w-[50%] z-10">
               <h2
@@ -56,7 +55,9 @@ const PromoCards = () => {
                 className={`relative text-sm font-bold uppercase tracking-widest transition-opacity duration-300 ${promo.textColor} w-fit group`}
               >
                 {promo.buttonText}
-                <span className={`absolute w-0 h-px -bottom-1 left-0 ${promo.bgColor} transition-all duration-300 group-hover:w-full`}></span>
+                <span
+                  className={`absolute w-0 h-px -bottom-1 left-0 ${promo.bgColor} transition-all duration-300 group-hover:w-full`}
+                ></span>
               </Link>
             </div>
 
