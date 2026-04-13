@@ -46,10 +46,10 @@ const Wishlist = () => {
       {/* Wishlist Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {wishlistItems.map((item) => (
-          <div key={item._id || item.id} className="group relative flex flex-col">
+          <div key={item._id} className="group relative flex flex-col">
             {/* Image */}
             <div className="relative overflow-hidden">
-              <Link to={`/products/${item._id || item.id}`}>
+              <Link to={`/products/${item._id}`}>
                 <img
                   src={item.image}
                   alt={item.title}
@@ -58,7 +58,7 @@ const Wishlist = () => {
               </Link>
 
               <button
-                onClick={() => removeFromWishlist(item._id || item.id)}
+                onClick={() => removeFromWishlist(item._id)}
                 className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md transition-all duration-300 hover:bg-black hover:text-white"
               >
                 <X size={14} />
@@ -68,7 +68,7 @@ const Wishlist = () => {
             {/* Product Info */}
             <div className="mt-3 flex flex-col gap-1">
               <Link
-                to={`/products/${item._id || item.id}`}
+                to={`/products/${item._id}`}
                 className="text-sm font-semibold text-black hover:underline"
               >
                 {item.title}
@@ -88,6 +88,7 @@ const Wishlist = () => {
                   if (item.stock === 0) return;
                   addToCart({ ...item, size: "M" });
                   openSidebar();
+                  clearWishlist();
                 }}
               >
                 <ShoppingBag size={14} />

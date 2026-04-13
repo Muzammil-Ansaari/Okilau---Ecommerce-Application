@@ -4,17 +4,17 @@ import Button from "./Button";
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
 
-const Card = ({ id, title, price, image, stock }) => {
+const Card = ({ product }) => {
+  const { _id, title, price, image, stock } = product;
+  
   const { toggleWishlist, isWishlisted } = useWishlist();
   const { addToCart, openSidebar } = useCart();
-
-  const product = { id, title, price, image, stock };
 
   return (
     <div className="h-100 group flex flex-col justify-between border border-[#d0d0d0]/50 p-2 shadow-sm transition-all duration-300 hover:shadow-xl text-center">
       {/* Image */}
       <div className="relative h-60 overflow-hidden cursor-pointer">
-        <Link to={`/products/${id}`}>
+        <Link to={`/products/${_id}`}>
           <img
             className="h-full w-full object-cover object-center transition-all duration-700 group-hover:scale-110"
             src={image}
@@ -32,13 +32,13 @@ const Card = ({ id, title, price, image, stock }) => {
         >
           <Heart
             size={14}
-            className={isWishlisted(id) ? "fill-red-500 text-red-500" : ""}
+            className={isWishlisted(_id) ? "fill-red-500 text-red-500" : ""}
           />
         </button>
       </div>
 
       {/* Title */}
-      <Link to={`/products/${id}`}>
+      <Link to={`/products/${_id}`}>
         <p className="my-2 cursor-pointer font-semibold transition-all duration-300 hover:text-gray-600">
           {title}
         </p>

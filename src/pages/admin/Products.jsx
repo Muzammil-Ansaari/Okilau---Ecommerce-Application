@@ -61,10 +61,16 @@ const ProductModal = ({ product, onClose, onSave }) => {
         price: Number(form.price),
         stock: Number(form.stock),
         images: form.images
-          ? form.images.split(",").map((i) => i.trim()).filter(Boolean)
+          ? form.images
+              .split(",")
+              .map((i) => i.trim())
+              .filter(Boolean)
           : [],
         colors: form.colors
-          ? form.colors.split(",").map((c) => c.trim()).filter(Boolean)
+          ? form.colors
+              .split(",")
+              .map((c) => c.trim())
+              .filter(Boolean)
           : [],
       };
 
@@ -94,7 +100,6 @@ const ProductModal = ({ product, onClose, onSave }) => {
 
       {/* Modal */}
       <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl overflow-y-auto max-h-[90vh]">
-
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <h2 className="font-['Anton'] text-lg uppercase tracking-widest text-black">
@@ -107,7 +112,6 @@ const ProductModal = ({ product, onClose, onSave }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
-
           {/* Title */}
           <div>
             <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-gray-500">
@@ -159,6 +163,7 @@ const ProductModal = ({ product, onClose, onSave }) => {
               <input
                 name="stock"
                 type="number"
+                min="0"
                 value={form.stock}
                 onChange={handleChange}
                 placeholder="50"
@@ -292,11 +297,13 @@ const ProductModal = ({ product, onClose, onSave }) => {
             className="bg-black py-3 text-sm font-medium uppercase tracking-widest text-white transition-all hover:bg-gray-800 disabled:opacity-60"
           >
             {loading
-              ? isEditing ? "Updating..." : "Adding..."
-              : isEditing ? "Update Product" : "Add Product"
-            }
+              ? isEditing
+                ? "Updating..."
+                : "Adding..."
+              : isEditing
+                ? "Update Product"
+                : "Add Product"}
           </button>
-
         </form>
       </div>
     </>
@@ -328,7 +335,8 @@ const AdminProducts = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
     try {
       await axiosInstance.delete(`/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -351,12 +359,13 @@ const AdminProducts = () => {
 
   return (
     <div className="flex flex-col gap-6">
-
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="font-['Anton'] text-3xl uppercase tracking-widest text-black">
           Products
-          <span className="ml-2 text-lg text-gray-400">({products.length})</span>
+          <span className="ml-2 text-lg text-gray-400">
+            ({products.length})
+          </span>
         </h1>
         <button
           onClick={handleAdd}
@@ -370,7 +379,9 @@ const AdminProducts = () => {
       {/* Loading */}
       {loading && (
         <div className="flex min-h-[40vh] items-center justify-center">
-          <p className="text-sm uppercase tracking-widest text-gray-400">Loading...</p>
+          <p className="text-sm uppercase tracking-widest text-gray-400">
+            Loading...
+          </p>
         </div>
       )}
 
@@ -390,8 +401,10 @@ const AdminProducts = () => {
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product._id} className="border-b border-gray-50 hover:bg-gray-50">
-
+                <tr
+                  key={product._id}
+                  className="border-b border-gray-50 hover:bg-gray-50"
+                >
                   {/* Product */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -420,18 +433,22 @@ const AdminProducts = () => {
 
                   {/* Stock */}
                   <td className="px-6 py-4">
-                    <span className={`font-medium ${product.stock === 0 ? "text-red-500" : "text-green-500"}`}>
+                    <span
+                      className={`font-medium ${product.stock === 0 ? "text-red-500" : "text-green-500"}`}
+                    >
                       {product.stock === 0 ? "Out of stock" : product.stock}
                     </span>
                   </td>
 
                   {/* Trending */}
                   <td className="px-6 py-4">
-                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      product.trending
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-500"
-                    }`}>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        product.trending
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
                       {product.trending ? "Yes" : "No"}
                     </span>
                   </td>
@@ -453,7 +470,6 @@ const AdminProducts = () => {
                       </button>
                     </div>
                   </td>
-
                 </tr>
               ))}
             </tbody>
@@ -478,7 +494,6 @@ const AdminProducts = () => {
           onSave={fetchProducts}
         />
       )}
-
     </div>
   );
 };

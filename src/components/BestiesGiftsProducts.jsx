@@ -24,9 +24,9 @@ const BestiesGiftsProducts = () => {
         {products
           .filter((p) => p.trending)
           .map((product) => (
-            <SwiperSlide key={product.id}>
+            <SwiperSlide key={product._id}>
               <Card
-                id={product.id}
+                id={product._id}
                 image={product.image}
                 title={product.title}
                 price={product.price}

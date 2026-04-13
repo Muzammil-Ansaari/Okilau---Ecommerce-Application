@@ -53,13 +53,13 @@ const Cart = () => {
           <div className="flex flex-col divide-y divide-gray-100">
             {cartItems.map((item, index) => (
               <div
-                key={`${item.id}-${item.size}-${index}`}
+                key={`${item._id}-${item.size}-${index}`}
                 className="grid grid-cols-12 items-center gap-4 py-6"
               >
                 {/* Image + Info */}
                 <div className="col-span-10 flex gap-4 sm:col-span-6">
                   <Link
-                    to={`/products/${item.id}`}
+                    to={`/products/${item._id}`}
                     className="h-28 w-24 shrink-0 overflow-hidden"
                   >
                     <img
@@ -70,7 +70,7 @@ const Cart = () => {
                   </Link>
                   <div className="flex flex-col justify-center gap-1">
                     <Link
-                      to={`/products/${item.id}`}
+                      to={`/products/${item._id}`}
                       className="text-sm font-semibold text-black hover:underline"
                     >
                       {item.title}
@@ -91,7 +91,7 @@ const Cart = () => {
                 {/* Remove — mobile */}
                 <div className="col-span-2 flex justify-end sm:hidden">
                   <button
-                    onClick={() => removeFromCart(item.id, item.size)}
+                    onClick={() => removeFromCart(item._id, item.size)}
                     className="text-gray-300 transition-colors hover:text-black"
                   >
                     <X size={18} />
@@ -107,7 +107,7 @@ const Cart = () => {
                 <div className="col-span-10 sm:col-span-2">
                   <div className="flex w-fit items-center border border-gray-200">
                     <button
-                      onClick={() => updateQty(item.id, item.size, item.qty - 1)}
+                      onClick={() => updateQty(item._id, item.size, item.qty - 1)}
                       className="flex h-8 w-8 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                     >
                       <Minus size={12} />
@@ -116,7 +116,7 @@ const Cart = () => {
                       {item.qty}
                     </span>
                     <button
-                      onClick={() => updateQty(item.id, item.size, item.qty + 1)}
+                      onClick={() => updateQty(item._id, item.size, item.qty + 1)}
                       className="flex h-8 w-8 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                     >
                       <Plus size={12} />
@@ -130,7 +130,7 @@ const Cart = () => {
                     Rs. {(item.price * item.qty).toLocaleString()}
                   </p>
                   <button
-                    onClick={() => removeFromCart(item.id, item.size)}
+                    onClick={() => removeFromCart(item._id, item.size)}
                     className="text-gray-300 transition-colors hover:text-black"
                   >
                     <X size={16} />

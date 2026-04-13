@@ -6,12 +6,10 @@ import { useWishlist } from "../context/WishlistContext";
 import Button from "../components/UI/Button";
 import axiosInstance from "../utils/axios";
 
-const SIZES = ["S", "M", "L", "XL"];
-
 const ProductDetail = () => {
   const { id } = useParams();
 
-  const { addToCart, openSidebar } = useCart();
+  const { addToCart, openSidebar, cartItems } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
 
   const [product, setProduct] = useState(null);
@@ -25,14 +23,12 @@ const ProductDetail = () => {
   const [qty, setQty] = useState(1);
   const [sizeError, setSizeError] = useState(false);
 
-  // ── Fetch product from API ──
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // reset selections when product changes
         setSelectedImage(0);
         setSelectedSize("");
         setSelectedColor("");
@@ -42,7 +38,6 @@ const ProductDetail = () => {
         const { data } = await axiosInstance.get(`/products/${id}`);
         setProduct(data);
 
-        // fetch related products — same category
         const { data: allProducts } = await axiosInstance.get(
           `/products?category=${data.category}`,
         );
@@ -57,22 +52,6 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
-    if (!selectedSize) {
-      setSizeError(true);
-      return;
-    }
-    setSizeError(false);
-    addToCart({
-      ...product,
-      size: selectedSize,
-      color: selectedColor,
-      qty,
-    });
-    openSidebar();
-  };
-
-  // ── Loading state ──
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -83,7 +62,6 @@ const ProductDetail = () => {
     );
   }
 
-  // ── Error state ──
   if (error || !product) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
@@ -97,7 +75,31 @@ const ProductDetail = () => {
     );
   }
 
-  // images — use product.images array or fallback to single image
+  // ── how many already in cart ──
+  const alreadyInCart = cartItems
+    .filter((item) => item._id === product._id)
+    .reduce((total, item) => total + item.qty, 0);
+
+  // ── available stock = total - already in cart ──
+  const availableStock = product.stock - alreadyInCart;
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      setSizeError(true);
+      return;
+    }
+    if (availableStock <= 0) return;
+    setSizeError(false);
+    addToCart({
+      ...product,
+      size: selectedSize,
+      color: selectedColor,
+      qty,
+    });
+    setQty(1);
+    openSidebar();
+  };
+
   const images = product.images?.length > 0 ? product.images : [product.image];
 
   return (
@@ -115,7 +117,6 @@ const ProductDetail = () => {
         <span className="text-black">{product.title}</span>
       </div>
 
-      {/* Main Content */}
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         {/* ── Left — Image Gallery ── */}
         <div className="flex flex-col gap-4">
@@ -204,7 +205,7 @@ const ProductDetail = () => {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              {SIZES.map((size) => (
+              {product.sizes.map((size) => (
                 <button
                   key={size}
                   onClick={() => {
@@ -231,34 +232,41 @@ const ProductDetail = () => {
           {/* Quantity Selector */}
           <div>
             <p className="mb-3 text-sm font-medium text-black">Quantity</p>
-            <div className="flex w-fit items-center border border-gray-200">
-              <button
-                onClick={() => setQty((prev) => Math.max(1, prev - 1))}
-                className="flex h-10 w-10 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
-              >
-                <Minus size={14} />
-              </button>
-              <span className="w-12 text-center text-sm font-medium">
-                {qty}
-              </span>
-              <button
-                onClick={() =>
-                  setQty((prev) => Math.min(product.stock, prev + 1))
-                }
-                disabled={qty >= product.stock}
-                className="flex h-10 w-10 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
-              >
-                <Plus size={14} />
-              </button>
-              
-              {product.stock > 0 && product.stock <= 10 && (
-                <p className="text-xs text-red-500">
-                  Only {product.stock} left in stock!
-                </p>
-              )}
-              
+            <div className="flex items-center gap-4">
+              <div className="flex w-fit items-center border border-gray-200">
+                <button
+                  onClick={() => setQty((prev) => Math.max(1, prev - 1))}
+                  className="flex h-10 w-10 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
+                >
+                  <Minus size={14} />
+                </button>
+                <span className="w-12 text-center text-sm font-medium">
+                  {qty}
+                </span>
+                <button
+                  onClick={() =>
+                    setQty((prev) => Math.min(availableStock, prev + 1))
+                  }
+                  disabled={qty >= availableStock}
+                  className="flex h-10 w-10 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <Plus size={14} />
+                </button>
+              </div>
+
+              {/* Stock messages */}
               {product.stock === 0 && (
                 <p className="text-xs text-red-500">Out of stock</p>
+              )}
+              {product.stock > 0 && availableStock <= 0 && (
+                <p className="text-xs text-red-500">
+                  All available stock is in your cart!
+                </p>
+              )}
+              {availableStock > 0 && availableStock <= 5 && (
+                <p className="text-xs text-orange-500">
+                  Only {availableStock} left!
+                </p>
               )}
             </div>
           </div>
@@ -269,10 +277,14 @@ const ProductDetail = () => {
               variant="black"
               className="w-full"
               onClick={handleAddToCart}
-              disabled={product.stock === 0}
+              disabled={product.stock === 0 || availableStock <= 0}
             >
               <ShoppingBag size={16} />
-              {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+              {product.stock === 0
+                ? "Out of Stock"
+                : availableStock <= 0
+                  ? "All Stock in Cart"
+                  : "Add to Cart"}
             </Button>
             <Button
               variant="gray"

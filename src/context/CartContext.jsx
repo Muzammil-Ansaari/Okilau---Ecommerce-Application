@@ -18,41 +18,68 @@ export const CartProvider = ({ children }) => {
   const closeSidebar = () => setIsSidebarOpen(false);
 
   const addToCart = (product) => {
-    const quantity = product.qty || 1;
+  const quantity = product.qty || 1;
 
-    setCartItems((prev) => {
-      const exists = prev.find(
-        (item) => item._id === product._id && item.size === product.size,
+  setCartItems((prev) => {
+    // 🔥 total qty of this product (all sizes)
+    const totalQty = prev
+      .filter((item) => item._id === product._id)
+      .reduce((sum, item) => sum + item.qty, 0);
+
+    // ❌ block if exceeding stock
+    if (totalQty + quantity > product.stock) {
+      return prev; // or show toast later
+    }
+
+    const exists = prev.find(
+      (item) => item._id === product._id && item.size === product.size,
+    );
+
+    if (exists) {
+      return prev.map((item) =>
+        item._id === product._id && item.size === product.size
+          ? { ...item, qty: item.qty + quantity }
+          : item,
       );
+    }
 
-      if (exists) {
-        return prev.map((item) =>
-          item._id === product._id && item.size === product.size
-            ? { ...item, qty: item.qty + quantity }
-            : item,
-        );
-      }
-
-      return [...prev, { ...product, qty: quantity }];
-    });
-  };
+    return [...prev, { ...product, qty: quantity }];
+  });
+};
 
   const removeFromCart = (id, size) => {
     setCartItems((prev) =>
-      prev.filter((item) => !(item.id === id && item.size === size)),
+      prev.filter((item) => !(item._id === id && item.size === size)),
     );
   };
 
-  const updateQty = (id, size, qty) => {
-    if (qty <= 0) {
-      removeFromCart(id, size);
-      return;
-    }
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id && item.size === size ? { ...item, qty } : item,
-      ),
-    );
+  const updateQty = (id, size, newQty) => {
+    setCartItems((prev) => {
+      const targetItem = prev.find(
+        (item) => item._id === id && item.size === size,
+      );
+
+      if (!targetItem) return prev;
+
+      // 🔥 total qty of this product (all sizes)
+      const totalQty = prev
+        .filter((item) => item._id === id)
+        .reduce((sum, item) => sum + item.qty, 0);
+
+      // ❌ block if exceeding stock
+      if (totalQty - targetItem.qty + newQty > targetItem.stock) {
+        return prev;
+      }
+
+      // remove if 0
+      if (newQty <= 0) {
+        return prev.filter((item) => !(item._id === id && item.size === size));
+      }
+
+      return prev.map((item) =>
+        item._id === id && item.size === size ? { ...item, qty: newQty } : item,
+      );
+    });
   };
 
   const clearCart = () => setCartItems([]);

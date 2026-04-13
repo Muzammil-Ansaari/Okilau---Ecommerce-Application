@@ -41,13 +41,7 @@ const TrendingProducts = () => {
         >
           {trendingProducts.map((product) => (
             <SwiperSlide key={product._id} style={{ height: "auto" }}>
-              <Card
-                id={product._id}
-                title={product.title}
-                price={product.price}
-                image={product.image}
-                stock={product.stock}
-              />
+              <Card product={product} />
             </SwiperSlide>
           ))}
         </Swiper>

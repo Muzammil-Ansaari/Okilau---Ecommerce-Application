@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -54,6 +54,33 @@ const Checkout = () => {
     country: "Pakistan",
   });
 
+  // add useEffect to fetch address
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        const { data } = await axiosInstance.get("/users/address", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // pre-fill form if address exists
+        if (data?.address) {
+          setForm((prev) => ({
+            ...prev,
+            phone: data.phone || "",
+            address: data.address || "",
+            city: data.city || "",
+            state: data.state || "",
+            zip: data.zip || "",
+            country: data.country || "Pakistan",
+          }));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (token) fetchAddress();
+  }, [token]);
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -91,7 +118,7 @@ const Checkout = () => {
         "/orders",
         {
           items: cartItems.map((item) => ({
-            product: item._id || item.id,
+            product: item._id,
             title: item.title,
             image: item.image,
             price: item.price,
@@ -118,6 +145,19 @@ const Checkout = () => {
             Authorization: `Bearer ${token}`,
           },
         },
+      );
+
+      await axiosInstance.put(
+        "/users/address",
+        {
+          phone: form.phone,
+          address: form.address,
+          city: form.city,
+          state: form.state,
+          zip: form.zip,
+          country: form.country,
+        },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       clearCart();

@@ -74,12 +74,12 @@ const CartSidebar = () => {
               <div className="flex flex-col gap-6">
                 {cartItems.map((item, index) => (
                   <div
-                    key={`${item.id}-${item.size}-${index}`}
+                    key={`${item._id}-${item.size}-${index}`}
                     className="flex gap-4"
                   >
                     {/* Product Image */}
                     <Link
-                      to={`/products/${item.id}`}
+                      to={`/products/${item._id}`}
                       onClick={closeSidebar}
                       className="h-24 w-20 shrink-0 overflow-hidden"
                     >
@@ -94,7 +94,7 @@ const CartSidebar = () => {
                     <div className="flex flex-1 flex-col justify-between">
                       <div>
                         <Link
-                          to={`/products/${item.id}`}
+                          to={`/products/${item._id}`}
                           onClick={closeSidebar}
                           className="text-sm font-medium text-black hover:underline"
                         >
@@ -117,7 +117,7 @@ const CartSidebar = () => {
                         <div className="flex items-center border border-gray-200">
                           <button
                             onClick={() =>
-                              updateQty(item.id, item.size, item.qty - 1)
+                              updateQty(item._id, item.size, item.qty - 1)
                             }
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                           >
@@ -128,7 +128,7 @@ const CartSidebar = () => {
                           </span>
                           <button
                             onClick={() =>
-                              updateQty(item.id, item.size, item.qty + 1)
+                              updateQty(item._id, item.size, item.qty + 1)
                             }
                             disabled={item.qty >= item.stock}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
@@ -146,7 +146,7 @@ const CartSidebar = () => {
 
                     {/* Remove Button */}
                     <button
-                      onClick={() => removeFromCart(item.id, item.size)}
+                      onClick={() => removeFromCart(item._id, item.size)}
                       className="self-start text-gray-300 transition-colors hover:text-black"
                     >
                       <X size={16} />

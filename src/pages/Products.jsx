@@ -354,13 +354,7 @@ const Products = () => {
               ) : (
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   {filteredProducts.map((product) => (
-                    <Card
-                      key={product._id}
-                      id={product._id}
-                      title={product.title}
-                      price={product.price}
-                      image={product.image}
-                    />
+                    <Card key={product._id} product={product} />
                   ))}
                 </div>
               )}
