@@ -60,6 +60,22 @@ const AdminOrders = () => {
     }
   };
 
+  const handlePaymentStatusUpdate = async (orderId, paymentStatus) => {
+    try {
+      await axiosInstance.put(
+        `/orders/${orderId}/payment`,
+        { paymentStatus },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      // update locally
+      setOrders((prev) =>
+        prev.map((o) => (o._id === orderId ? { ...o, paymentStatus } : o)),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // filter by status
   const filteredOrders =
     filterStatus === "all"
@@ -116,6 +132,7 @@ const AdminOrders = () => {
                 <th className="px-6 py-4">Total</th>
                 <th className="px-6 py-4">Date</th>
                 <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Payment</th>
                 <th className="px-6 py-4">Details</th>
               </tr>
             </thead>
@@ -128,7 +145,7 @@ const AdminOrders = () => {
                     className="border-b border-gray-50 hover:bg-gray-50"
                   >
                     <td className="px-6 py-4 font-medium text-black">
-                      #{order._id.slice(-6).toUpperCase()}
+                      #{order._id}
                     </td>
                     <td className="px-6 py-4">
                       <p className="font-medium text-black">
@@ -143,7 +160,7 @@ const AdminOrders = () => {
                       {order.items.length > 1 ? "s" : ""}
                     </td>
                     <td className="px-6 py-4 font-medium text-black">
-                      Rs. {order.totalPrice.toLocaleString()}
+                      $ {order.totalPrice.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 text-gray-400">
                       {new Date(order.createdAt).toLocaleDateString()}
@@ -163,6 +180,30 @@ const AdminOrders = () => {
                             {status.charAt(0).toUpperCase() + status.slice(1)}
                           </option>
                         ))}
+                      </select>
+                    </td>
+
+                    {/* Payment Status Dropdown */}
+                    <td className="px-6 py-4">
+                      <select
+                        value={order.paymentStatus}
+                        onChange={(e) =>
+                          handlePaymentStatusUpdate(order._id, e.target.value)
+                        }
+                        className={`rounded-full px-3 py-1 text-xs font-medium outline-none cursor-pointer ${
+                          order.paymentStatus === "paid"
+                            ? "bg-green-100 text-green-700"
+                            : order.paymentStatus === "refunded"
+                              ? "bg-blue-100 text-blue-700"
+                              : order.paymentStatus === "failed"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-yellow-100 text-yellow-700"
+                        }`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
+                        <option value="failed">Failed</option>
+                        <option value="refunded">Refunded</option>
                       </select>
                     </td>
 
@@ -213,7 +254,7 @@ const AdminOrders = () => {
                                     </p>
                                   </div>
                                   <p className="text-sm font-bold text-black">
-                                    Rs.{" "}
+                                    ${" "}
                                     {(item.price * item.qty).toLocaleString()}
                                   </p>
                                 </div>
@@ -246,7 +287,7 @@ const AdminOrders = () => {
                             <p className="text-gray-500">
                               Subtotal:{" "}
                               <span className="font-medium text-black">
-                                Rs. {order.totalPrice.toLocaleString()}
+                                $ {order.totalPrice.toLocaleString()}
                               </span>
                             </p>
                             <p className="text-gray-500">
@@ -254,13 +295,13 @@ const AdminOrders = () => {
                               <span className="font-medium text-black">
                                 {order.shippingPrice === 0
                                   ? "Free"
-                                  : `Rs. ${order.shippingPrice}`}
+                                  : `$ ${order.shippingPrice}`}
                               </span>
                             </p>
                             <p className="text-gray-500">
                               Total:{" "}
                               <span className="font-bold text-black">
-                                Rs.{" "}
+                                ${" "}
                                 {(
                                   order.totalPrice + order.shippingPrice
                                 ).toLocaleString()}

@@ -46,7 +46,7 @@ const Products = () => {
   });
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [priceRange, setPriceRange] = useState([0, 2000]);
   const [sortBy, setSortBy] = useState("newest");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
@@ -102,7 +102,7 @@ const Products = () => {
     setSelectedCategories([]);
     setSelectedSizes([]);
     setSelectedColors([]);
-    setPriceRange([0, 10000]);
+    setPriceRange([0, 2000]);
     setSortBy("newest");
   };
 
@@ -111,7 +111,7 @@ const Products = () => {
     selectedSizes.length > 0 ||
     selectedColors.length > 0 ||
     priceRange[0] > 0 ||
-    priceRange[1] < 10000;
+    priceRange[1] < 2000;
 
   // ── Sidebar JSX ──
   const Sidebar = () => (
@@ -155,8 +155,8 @@ const Products = () => {
           <input
             type="range"
             min={0}
-            max={10000}
-            step={100}
+            max={2000}
+            step={10}
             value={priceRange[1]}
             onChange={(e) =>
               setPriceRange([priceRange[0], Number(e.target.value)])
@@ -164,8 +164,8 @@ const Products = () => {
             className="w-full accent-black"
           />
           <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>Rs. {priceRange[0].toLocaleString()}</span>
-            <span>Rs. {priceRange[1].toLocaleString()}</span>
+            <span>$ {priceRange[0].toLocaleString()}</span>
+            <span>$ {priceRange[1].toLocaleString()}</span>
           </div>
         </div>
       </FilterSection>

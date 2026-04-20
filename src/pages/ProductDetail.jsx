@@ -77,7 +77,12 @@ const ProductDetail = () => {
 
   // ── how many already in cart ──
   const alreadyInCart = cartItems
-    .filter((item) => item._id === product._id)
+    .filter(
+      (item) =>
+        item._id === product._id &&
+        item.size === selectedSize &&
+        item.color === selectedColor,
+    )
     .reduce((total, item) => total + item.qty, 0);
 
   // ── available stock = total - already in cart ──
@@ -162,7 +167,7 @@ const ProductDetail = () => {
           </h1>
 
           <p className="text-2xl font-bold text-black">
-            Rs. {product.price.toLocaleString()}
+            $ {product.price.toLocaleString()}
           </p>
 
           <div className="border-t border-gray-100" />
@@ -341,7 +346,7 @@ const ProductDetail = () => {
                   {item.title}
                 </p>
                 <p className="text-sm text-gray-500">
-                  Rs. {item.price.toLocaleString()}
+                  $ {item.price.toLocaleString()}
                 </p>
               </Link>
             ))}

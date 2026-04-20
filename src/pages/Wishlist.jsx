@@ -74,7 +74,7 @@ const Wishlist = () => {
                 {item.title}
               </Link>
               <p className="text-sm font-medium text-gray-600">
-                Rs. {item.price.toLocaleString()}
+                $ {item.price.toLocaleString()}
               </p>
             </div>
 

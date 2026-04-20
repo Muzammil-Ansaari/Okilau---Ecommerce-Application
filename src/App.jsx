@@ -24,6 +24,10 @@ import AdminUsers from "./pages/admin/Users";
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AdminReturns from "./pages/admin/Returns";
+import ResetPassword from "./pages/ResetPassword";
+import ChatBot from "./components/Chatbot";
+import OrderProcessing from "./pages/OrderProcessing";
 
 const MainLayout = () => (
   <>
@@ -32,6 +36,7 @@ const MainLayout = () => (
     <AuthModal />
     <Outlet />
     <Footer />
+    <ChatBot />
   </>
 );
 
@@ -47,6 +52,7 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route
           path="/checkout"
           element={
@@ -71,6 +77,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/order-processing"
+          element={
+            <ProtectedRoute>
+              <OrderProcessing />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       {/* ── Admin routes — with Sidebar only ── */}
@@ -86,6 +100,7 @@ const App = () => {
         <Route path="products" element={<AdminProducts />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="users" element={<AdminUsers />} />
+        <Route path="returns" element={<AdminReturns />} />
       </Route>
     </Routes>
   );

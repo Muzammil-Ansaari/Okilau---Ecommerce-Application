@@ -117,7 +117,7 @@ const CartSidebar = () => {
                         <div className="flex items-center border border-gray-200">
                           <button
                             onClick={() =>
-                              updateQty(item._id, item.size, item.qty - 1)
+                              updateQty(item._id, item.size, item.color, item.qty - 1)
                             }
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                           >
@@ -128,7 +128,7 @@ const CartSidebar = () => {
                           </span>
                           <button
                             onClick={() =>
-                              updateQty(item._id, item.size, item.qty + 1)
+                              updateQty(item._id, item.size, item.color, item.qty + 1)
                             }
                             disabled={item.qty >= item.stock}
                             className="flex h-7 w-7 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
@@ -139,14 +139,14 @@ const CartSidebar = () => {
 
                         {/* Price */}
                         <p className="text-sm font-bold text-black">
-                          Rs. {(item.price * item.qty).toLocaleString()}
+                          $ {(item.price * item.qty).toLocaleString()}
                         </p>
                       </div>
                     </div>
 
                     {/* Remove Button */}
                     <button
-                      onClick={() => removeFromCart(item._id, item.size)}
+                      onClick={() => removeFromCart(item._id, item.size, item.color)}
                       className="self-start text-gray-300 transition-colors hover:text-black"
                     >
                       <X size={16} />
@@ -162,7 +162,7 @@ const CartSidebar = () => {
               <div className="mb-4 flex items-center justify-between">
                 <p className="text-sm text-gray-500">Subtotal</p>
                 <p className="text-base font-bold text-black">
-                  Rs. {cartTotal.toLocaleString()}
+                  $ {cartTotal.toLocaleString()}
                 </p>
               </div>
 

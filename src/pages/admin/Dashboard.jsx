@@ -81,7 +81,7 @@ const AdminDashboard = () => {
         />
         <StatCard
           title="Total Revenue"
-          value={`Rs. ${stats?.totalRevenue?.toLocaleString() || 0}`}
+          value={`$ ${stats?.totalRevenue?.toLocaleString() || 0}`}
           icon={DollarSign}
           color="bg-green-500"
         />
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
                 {stats?.recentOrders?.map((order) => (
                   <tr key={order._id} className="border-b border-gray-50">
                     <td className="py-3 pr-4 font-medium text-black">
-                      #{order._id.slice(-6).toUpperCase()}
+                      #{order._id}
                     </td>
                     <td className="py-3 pr-4 text-gray-600">
                       {order.user?.name || "N/A"}
@@ -134,7 +134,7 @@ const AdminDashboard = () => {
                       {order.items.length > 1 ? "s" : ""}
                     </td>
                     <td className="py-3 pr-4 font-medium text-black">
-                      Rs. {order.totalPrice.toLocaleString()}
+                      $ {order.totalPrice.toLocaleString()}
                     </td>
                     <td className="py-3 pr-4">
                       <span

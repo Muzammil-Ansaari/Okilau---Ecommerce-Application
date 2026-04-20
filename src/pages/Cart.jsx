@@ -8,7 +8,7 @@ const Cart = () => {
     useCart();
   const navigate = useNavigate();
 
-  const shipping = cartTotal > 5000 ? 0 : 299;
+  const shipping = cartTotal > 1000 ? 0 : 5;
   const total = cartTotal + shipping;
 
   if (cartItems.length === 0) {
@@ -30,17 +30,14 @@ const Cart = () => {
 
   return (
     <section className="min-h-screen px-4 py-12 sm:px-8 lg:px-16">
-
       {/* Heading */}
       <h1 className="mb-10 font-['Anton'] text-3xl uppercase tracking-widest text-black sm:text-4xl">
         Shopping Cart
       </h1>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-
         {/* ── Left — Cart Items ── */}
         <div className="lg:col-span-2">
-
           {/* Table Header — desktop only */}
           <div className="mb-4 hidden grid-cols-12 border-b border-gray-200 pb-3 text-xs font-medium uppercase tracking-widest text-gray-400 sm:grid">
             <span className="col-span-6">Product</span>
@@ -79,11 +76,13 @@ const Cart = () => {
                       <p className="text-xs text-gray-400">Size: {item.size}</p>
                     )}
                     {item.color && (
-                      <p className="text-xs text-gray-400">Color: {item.color}</p>
+                      <p className="text-xs text-gray-400">
+                        Color: {item.color}
+                      </p>
                     )}
                     {/* Mobile price */}
                     <p className="mt-1 text-sm font-bold text-black sm:hidden">
-                      Rs. {item.price.toLocaleString()}
+                      $ {item.price.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -91,7 +90,9 @@ const Cart = () => {
                 {/* Remove — mobile */}
                 <div className="col-span-2 flex justify-end sm:hidden">
                   <button
-                    onClick={() => removeFromCart(item._id, item.size)}
+                    onClick={() =>
+                      removeFromCart(item._id, item.size, item.color)
+                    }
                     className="text-gray-300 transition-colors hover:text-black"
                   >
                     <X size={18} />
@@ -100,14 +101,16 @@ const Cart = () => {
 
                 {/* Price — desktop */}
                 <div className="col-span-2 hidden text-center text-sm font-medium text-black sm:block">
-                  Rs. {item.price.toLocaleString()}
+                  $ {item.price.toLocaleString()}
                 </div>
 
                 {/* Qty Controls */}
                 <div className="col-span-10 sm:col-span-2">
                   <div className="flex w-fit items-center border border-gray-200">
                     <button
-                      onClick={() => updateQty(item._id, item.size, item.qty - 1)}
+                      onClick={() =>
+                        updateQty(item._id, item.size, item.color, item.qty - 1)
+                      }
                       className="flex h-8 w-8 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                     >
                       <Minus size={12} />
@@ -116,7 +119,9 @@ const Cart = () => {
                       {item.qty}
                     </span>
                     <button
-                      onClick={() => updateQty(item._id, item.size, item.qty + 1)}
+                      onClick={() =>
+                        updateQty(item._id, item.size, item.color, item.qty + 1)
+                      }
                       className="flex h-8 w-8 items-center justify-center text-gray-500 transition-colors hover:bg-black hover:text-white"
                     >
                       <Plus size={12} />
@@ -127,10 +132,12 @@ const Cart = () => {
                 {/* Item Total + Remove — desktop */}
                 <div className="col-span-2 hidden items-center justify-end gap-4 sm:flex">
                   <p className="text-sm font-bold text-black">
-                    Rs. {(item.price * item.qty).toLocaleString()}
+                    $ {(item.price * item.qty).toLocaleString()}
                   </p>
                   <button
-                    onClick={() => removeFromCart(item._id, item.size)}
+                    onClick={() =>
+                      removeFromCart(item._id, item.size, item.color)
+                    }
                     className="text-gray-300 transition-colors hover:text-black"
                   >
                     <X size={16} />
@@ -168,7 +175,7 @@ const Cart = () => {
                   Subtotal ({cartItems.length} items)
                 </p>
                 <p className="text-sm font-medium text-black">
-                  Rs. {cartTotal.toLocaleString()}
+                  $ {cartTotal.toLocaleString()}
                 </p>
               </div>
 
@@ -179,7 +186,7 @@ const Cart = () => {
                   {shipping === 0 ? (
                     <span className="text-green-500">Free</span>
                   ) : (
-                    `Rs. ${shipping}`
+                    `$ ${shipping}`
                   )}
                 </p>
               </div>
@@ -187,7 +194,7 @@ const Cart = () => {
               {/* Free shipping notice */}
               {shipping > 0 && (
                 <p className="text-xs text-gray-400">
-                  Add Rs. {(5000 - cartTotal).toLocaleString()} more for free
+                  Add $ {(1000 - cartTotal).toLocaleString()} more for free
                   shipping!
                 </p>
               )}
@@ -199,7 +206,7 @@ const Cart = () => {
               <div className="flex items-center justify-between">
                 <p className="text-base font-bold text-black">Total</p>
                 <p className="text-base font-bold text-black">
-                  Rs. {total.toLocaleString()}
+                  $ {total.toLocaleString()}
                 </p>
               </div>
             </div>
@@ -220,7 +227,6 @@ const Cart = () => {
             </p>
           </div>
         </div>
-
       </div>
     </section>
   );

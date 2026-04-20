@@ -9,6 +9,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  RotateCcw,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -16,6 +17,7 @@ const NAV_LINKS = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard, end: true },
   { label: "Products", path: "/admin/products", icon: Package },
   { label: "Orders", path: "/admin/orders", icon: ShoppingBag },
+  { label: "Returns", path: "/admin/returns", icon: RotateCcw },
   { label: "Users", path: "/admin/users", icon: Users },
 ];
 

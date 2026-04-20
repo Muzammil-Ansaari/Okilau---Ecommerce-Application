@@ -145,7 +145,7 @@ const ProductModal = ({ product, onClose, onSave }) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-gray-500">
-                Price (Rs.) *
+                Price ($) *
               </label>
               <input
                 name="price"
@@ -415,7 +415,7 @@ const AdminProducts = () => {
                           className="h-full w-full object-cover object-center"
                         />
                       </div>
-                      <p className="line-clamp-1 font-medium text-black max-w-[200px]">
+                      <p className="line-clamp-1 font-medium text-black max-w-50">
                         {product.title}
                       </p>
                     </div>
@@ -428,7 +428,7 @@ const AdminProducts = () => {
 
                   {/* Price */}
                   <td className="px-6 py-4 font-medium text-black">
-                    Rs. {product.price.toLocaleString()}
+                    $ {product.price.toLocaleString()}
                   </td>
 
                   {/* Stock */}

@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useWishlist } from "../context/WishlistContext";
 import Button from "../components/UI/Button";
 import axiosInstance from "../utils/axios";
+import ReturnModal from "../components/ReturnModal";
 
 const Account = () => {
   const { user, token, logout } = useAuth();
@@ -14,6 +15,10 @@ const Account = () => {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("wishlist");
+
+  const [returnModal, setReturnModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [returns, setReturns] = useState([]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -53,12 +58,28 @@ const Account = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchReturns = async () => {
+      try {
+        const { data } = await axiosInstance.get("/returns/mine", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setReturns(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (token) fetchReturns();
+  }, [token]);
+
+  const getOrderReturn = (orderId) =>
+    returns.find((r) => r.order._id === orderId || r.order === orderId);
+
   return (
     <section className="min-h-screen px-4 py-12 sm:px-8 lg:px-16">
       <h1 className="mb-10 font-['Anton'] text-3xl uppercase tracking-widest text-black sm:text-4xl">
         My Account
       </h1>
-
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* ── Left — User Info ── */}
         <div className="lg:col-span-1">
@@ -177,7 +198,7 @@ const Account = () => {
                         {item.title}
                       </Link>
                       <p className="text-xs text-gray-500">
-                        Rs. {item.price.toLocaleString()}
+                        $ {item.price.toLocaleString()}
                       </p>
                     </div>
                   ))}
@@ -236,7 +257,7 @@ const Account = () => {
                         <div>
                           <p className="text-xs text-gray-400">Order ID</p>
                           <p className="text-sm font-medium text-black">
-                            #{order._id.slice(-8).toUpperCase()}
+                            #{order._id}
                           </p>
                         </div>
                         <div className="text-right">
@@ -273,7 +294,7 @@ const Account = () => {
                               )}
                             </div>
                             <p className="text-xs font-bold text-black">
-                              Rs. {(item.price * item.qty).toLocaleString()}
+                              $ {(item.price * item.qty).toLocaleString()}
                             </p>
                           </div>
                         ))}
@@ -286,11 +307,74 @@ const Account = () => {
                           {order.items.length > 1 ? "s" : ""}
                         </p>
                         <p className="text-sm font-bold text-black">
-                          Rs.{" "}
+                          ${" "}
                           {(
                             order.totalPrice + order.shippingPrice
                           ).toLocaleString()}
                         </p>
+                      </div>
+
+                      {/* in your orders map — after order footer */}
+                      <div className="mt-3 flex items-center justify-between">
+                        {/* Return button — only for delivered orders */}
+                        {order.status === "delivered" &&
+                          !getOrderReturn(order._id) && (
+                            <button
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                setReturnModal(true);
+                              }}
+                              className="text-xs text-gray-400 underline underline-offset-4 hover:text-black"
+                            >
+                              Request Return
+                            </button>
+                          )}
+
+                        {/* Return status — if return already requested */}
+                        {getOrderReturn(order._id) && (
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs text-gray-400">Return:</p>
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
+                                getOrderReturn(order._id).status === "completed"
+                                  ? "bg-green-100 text-green-700"
+                                  : getOrderReturn(order._id).status ===
+                                      "rejected"
+                                    ? "bg-red-100 text-red-700"
+                                    : getOrderReturn(order._id).status ===
+                                        "approved"
+                                      ? "bg-blue-100 text-blue-700"
+                                      : "bg-yellow-100 text-yellow-700"
+                              }`}
+                            >
+                              {getOrderReturn(order._id).status}
+                            </span>
+                            {/* refund status */}
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
+                                getOrderReturn(order._id).refundStatus ===
+                                "processed"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-gray-100 text-gray-600"
+                              }`}
+                            >
+                              Refund: {getOrderReturn(order._id).refundStatus}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Payment status */}
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
+                            order.paymentStatus === "paid"
+                              ? "bg-green-100 text-green-700"
+                              : order.paymentStatus === "refunded"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          Payment: {order.paymentStatus}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -300,6 +384,23 @@ const Account = () => {
           )}
         </div>
       </div>
+
+      {returnModal && selectedOrder && (
+        <ReturnModal
+          order={selectedOrder}
+          onClose={() => {
+            setReturnModal(false);
+            setSelectedOrder(null);
+          }}
+          onSuccess={async () => {
+            // refresh returns
+            const { data } = await axiosInstance.get("/returns/mine", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            setReturns(data);
+          }}
+        />
+      )}
     </section>
   );
 };

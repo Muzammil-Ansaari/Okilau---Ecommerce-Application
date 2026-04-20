@@ -117,7 +117,7 @@ const SearchBar = ({ isOpen, onClose }) => {
                       </p>
                     </div>
                     <p className="text-sm font-bold text-black">
-                      Rs. {product.price.toLocaleString()}
+                      $ {product.price.toLocaleString()}
                     </p>
                   </Link>
                 ))}

@@ -45,7 +45,7 @@ const Card = ({ product }) => {
       </Link>
 
       {/* Price */}
-      <p className="mb-2 text-lg font-medium text-gray-600">Rs. {price}</p>
+      <p className="mb-2 text-lg font-medium text-gray-600">$ {price}</p>
 
       {/* Button */}
       <Button
